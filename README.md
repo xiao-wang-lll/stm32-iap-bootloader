@@ -1,4 +1,4 @@
-# STM32F4 UART Bootloader
+# STM32F4 IAP Bootloader
 
 
 
