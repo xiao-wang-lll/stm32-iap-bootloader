@@ -78,8 +78,7 @@ LED:  PB0 (低电平点亮)
 1. **克隆项目**
 
 ```bash
-git clone https://github.com/yourusername/stm32F4_tomain_usart_easylogger.git
-cd stm32F4_tomain_usart_easylogger
+git clone https://github.com/xiao-wang-lll/stm32-iap-bootloader.git
 ```
 
 2. **使用 Keil MDK 打开项目**
