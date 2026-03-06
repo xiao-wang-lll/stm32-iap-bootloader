@@ -6,8 +6,9 @@
 > 基于 UART 的 STM32F4 系列 bootloader，支持 EasyLogger 日志、CRC32 校验、Flash 编程、固件升级
 
 [English](./README_EN.md) | [中文](./README.md)
+作者：[古译汉书-CSDN博客](https://blog.csdn.net/m0_56408226?type=blog)
 
-## ? 目录
+## 目录
 
 - [特性](#-特性)
 - [快速开始](#-快速开始)
@@ -18,36 +19,37 @@
 - [技术细节](#-技术细节)
 - [常见问题](#-常见问题)
 - [贡献指南](#-贡献指南)
-- [许可证](#-许可证)
+- [个人CSDN博客](#-个人CSDN博客)
+- [联系方式](#-联系方式)
 
 ---
 
-## ? 特性
+## 特性
 
 ### 核心功能
 
-- ? **UART 升级** - 基于串口的 IAP (In-Application Programming) 引导程序
-- ? **安全校验** - CRC16 数据包校验 + CRC32 固件完整性验证
-- ? **Magic Header** - 应用固件合法性验证机制
-- ? **Flash 编程** - 支持 STM32F4xx 系列内部 Flash 擦除与写入
-- ?? **多种启动模式** - 按键启动 / 串口触发启动 / 自动启动
+- **UART 升级** - 基于串口的 IAP (In-Application Programming) 引导程序
+- **安全校验** - CRC16 数据包校验 + CRC32 固件完整性验证
+- **Magic Header** - 应用固件合法性验证机制
+- **Flash 编程** - 支持 STM32F4xx 系列内部 Flash 擦除与写入
+-  **多种启动模式** - 按键启动 / 串口触发启动 / 自动启动
 
 ### 日志系统
 
-- ? **EasyLogger** - 高性能嵌入式日志库
-- ? **多级别日志** - ASSERT / ERROR / WARN / INFO / DEBUG / VERBOSE
-- ? **格式化输出** - 支持时间戳、标签、日志级别格式化
+- **EasyLogger** - 高性能嵌入式日志库
+- **多级别日志** - ASSERT / ERROR / WARN / INFO / DEBUG / VERBOSE
+- **格式化输出** - 支持时间戳、标签、日志级别格式化
 
 ### 驱动支持
 
-- ?? **按键检测** - 按键长按进入 bootloader 模式
-- ? **LED 指示** - 运行状态可视化指示
-- ?? **延时系统** - 定时器延时驱动
-- ? **环形缓冲区** - 高效 UART 数据接收
+- **按键检测** - 按键长按进入 bootloader 模式
+- **LED 指示** - 运行状态可视化指示
+- **延时系统** - 定时器延时驱动
+- **环形缓冲区** - 高效 UART 数据接收
 
 ---
 
-## ? 快速开始
+## 快速开始
 
 ### 硬件要求
 
@@ -154,7 +156,7 @@ C/C++ -> Define: USE_STDPERIPH_DRIVER, STM32F40_41xxx
 
 ---
 
-## ? 项目结构
+## 项目结构
 
 ```
 stm32F4_tomain_usart_easylogger/
@@ -243,7 +245,7 @@ stm32F4_tomain_usart_easylogger/
 
 ---
 
-## ? 使用方法
+## 使用方法
 
 ### 1. 启动 Bootloader 模式
 
@@ -338,7 +340,7 @@ class STM32Bootloader:
 
 ---
 
-## ? API 参考
+## API 参考
 
 ### Bootloader 核心函数
 
@@ -372,6 +374,27 @@ void stm32_flash_program(uint32_t address, uint8_t *data, uint32_t size);
 ### Magic Header
 
 ```c
+
+typedef struct
+{
+    uint32_t magic;         // 魔数，用于标识这是一个有效的魔术头
+    uint32_t bitmask;       // 位掩码，用于标识哪些字段有效
+    uint32_t reserved1[6];  // 保留字段，供将来扩展使用
+
+    uint32_t data_type;     // 类型，根据type类型选择固件下载位置,比如下载到eeprom或者w25Q64或者MCU的app区
+    uint32_t data_offset;   // 固件文件相对于bin文件里面的magic_header的偏移
+    uint32_t data_address;  // 固件写入的实际地址
+    uint32_t data_length;   // 固件长度
+    uint32_t data_crc32;    // 固件的CRC32校验值
+    uint32_t reserved2[11]; // 保留字段，供将来扩展使用
+
+    char version[128];      // 固件版本字符串
+
+    uint32_t reserved3[6];  // 保留字段，供将来扩展使用
+    uint32_t this_address;  // 该结构体在存储介质中的实际地址
+    uint32_t this_crc32;    // 该结构体本身的CRC32校验值
+} magic_header_t;
+
 // 验证 Magic Header
 bool magic_header_validate(void);
 
@@ -387,7 +410,7 @@ uint32_t magic_header_get_crc32(void);
 
 ---
 
-## ? 技术细节
+## 技术细节
 
 ### 内存布局
 
@@ -448,7 +471,7 @@ Bootloader 使用有限状态机 (FSM) 解析串口数据包:
 
 ---
 
-## ? 常见问题
+## 常见问题
 
 ### Q1: 如何修改 Bootloader 大小?
 
@@ -485,7 +508,7 @@ Bootloader 使用有限状态机 (FSM) 解析串口数据包:
 
 ---
 
-## ? 贡献指南
+## 贡献指南
 
 欢迎提交 Issue 和 Pull Request！
 
@@ -496,21 +519,17 @@ Bootloader 使用有限状态机 (FSM) 解析串口数据包:
 5. 打开 Pull Request
 
 ---
+## 个人CSDN博客
 
-## ? 许可证
-
-本项目基于 MIT 许可证开源。
-
----
-
-## ? 致谢
-
-- [EasyLogger](https://github.com/Armink/EasyLogger) - 高性能日志库
-- [STM32F4xx HAL](https://www.st.com/en/development-tools/stm32cubemx.html) - STM32 HAL 驱动
+https://blog.csdn.net/m0_56408226?type=blog
 
 ---
 
-<p align="center">
-  <sub>Built with ?? by Your Name</sub>
+## 联系方式
+
+17735813721@163.com
+---
+
+
 </p>
 
