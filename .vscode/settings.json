@@ -1,0 +1,16 @@
+{
+    "files.associations": {   //文件以c语言格式解释
+        "*.c": "c",
+        "*.h": "c"
+    },
+    "files.autoGuessEncoding": false, //是否自动猜测解码
+    "files.encoding": "gb2312", 
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "mdk": true
+    }
+}
